@@ -9,9 +9,11 @@ import React from 'react';
 import {
 	ClayCheckbox,
 	ClayInput,
+	ClayInputMoveBoxes,
 	ClayRadio,
 	ClayRadioGroup,
 	ClaySelect,
+	ClaySelectBox,
 	ClaySelectWithOption,
 	ClayToggle,
 } from '../src';
@@ -35,6 +37,60 @@ const ClayCheckboxWithState = () => {
 		/>
 	);
 };
+
+const moveBoxesOptions = [
+	[
+		{
+			label: 'Discord',
+			value: 'discord',
+		},
+		{
+			label: 'Evernote',
+			value: 'evernote',
+		},
+		{
+			label: 'Facebook',
+			value: 'facebook',
+		},
+
+		{
+			label: 'LinkedIn',
+			value: 'linkedin',
+		},
+	],
+	[
+		{
+			label: 'Reddit',
+			value: 'reddit',
+		},
+		{
+			label: 'Slack',
+			value: 'slack',
+		},
+		{
+			label: 'Twitter',
+			value: 'twitter',
+		},
+	],
+];
+
+storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => (
+	<ClayInputMoveBoxes
+		leftSelectLabel="In Use"
+		options={moveBoxesOptions}
+		rightSelectLabel="Available"
+		size={8}
+		spritemap={spritemap}
+	/>
+));
+
+// storiesOf('Components|ClaySelectBox', module).add('default', () => (
+// 	<ClaySelectBox
+// 		items={moveBoxesOptions}
+// 		label="In Use"
+// 		spritemap={spritemap}
+// 	/>
+// ));
 
 storiesOf('Components|ClayForm', module).add('Feedback', () => (
 	<div className="sheet">
