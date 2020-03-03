@@ -9,44 +9,46 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClayInput} from '.';
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import classNames from 'classnames';
 import React from 'react';
 
-// const newItemsB = swapArrayItems([items[1], items[0]], 0);
+function arrayMove(arr: Array<any>, oldIndex: number, newIndex: number) {
+	arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
 
-// const [one, zero] = swapArrayItems([items[1], items[0]], 0);
-// setNewItems([zero, one]);
+	return arr;
+}
 
 function reorderUp(array: Array<any>, selectedIndexes: Array<number>) {
-	const arrayToReorder = [...array];
+	let clonedArray = [...array];
 
-	selectedIndexes.map((index: number) => {
-		if (index === 0) {
-			return;
+	for (let i = 0; i < selectedIndexes.length; i++) {
+		const item = selectedIndexes[i];
+
+		if (item === 0) {
+			return clonedArray;
 		}
 
-		arrayToReorder.splice(index - 1, 0, arrayToReorder[index]);
-		arrayToReorder.splice(index + 1, 1);
-	});
+		clonedArray = arrayMove(clonedArray, item, item - 1);
+	}
 
-	return arrayToReorder;
+	return clonedArray;
 }
 
 function reorderDown(array: Array<any>, selectedIndexes: Array<number>) {
-	const arrayToReorder = [...array];
+	let clonedArray = [...array];
 
-	selectedIndexes.map((index: number) => {
-		if (index === arrayToReorder.length) {
-			return;
+	for (let i = 0; i < selectedIndexes.length; i++) {
+		const item = selectedIndexes[i];
+
+		if (selectedIndexes.includes(clonedArray.length - 1)) {
+			return clonedArray;
 		}
 
-		arrayToReorder.splice(index + 2, 0, arrayToReorder[index]);
-		arrayToReorder.splice(index, 1);
-	});
+		clonedArray = arrayMove(clonedArray, item, item + 1);
+	}
 
-	return arrayToReorder;
+	return clonedArray;
 }
 
 interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -63,6 +65,7 @@ interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const ClaySelectBox: React.FunctionComponent<IProps> = ({
+	className,
 	items,
 	label,
 	multiple,
@@ -73,12 +76,9 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 	spritemap,
 	value,
 }) => {
-	const [options, setOptions] = React.useState(items);
-	const [selected, setSelected] = React.useState<Array<string>>([]);
-
-	const selectedIndexes = options.reduce(
+	const selectedIndexes = items.reduce(
 		(acc: any, item: any, index: number) => {
-			if (selected.includes(item.value)) {
+			if (value.includes(item.value)) {
 				return [...acc, index];
 			}
 
@@ -88,62 +88,65 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 	);
 
 	return (
-		<ClayInput.Group className="input-move-box">
-			{label && <label>{label}</label>}
+		<div className="form-group-autofit select-box">
+			<div className="form-group-item">
+				{label && <label className="select-box-label">{label}</label>}
 
-			<select
-				multiple={multiple}
-				onChange={event => {
-					const newSelected = [...event.target.options]
-						.filter(({selected}) => selected)
-						.map(item => item.value);
+				<select
+					className={classNames(
+						className,
+						'form-control select-box-select'
+					)}
+					multiple={multiple}
+					onChange={event => {
+						const selectedItems = [...event.target.options]
+							.filter(({selected}) => selected)
+							.map(item => item.value);
 
-					setSelected(newSelected);
-					onChange(newSelected);
-				}}
-				size={size}
-				value={value || selected}
-			>
-				{options.map((option: any) => (
-					<option key={option.value} value={option.value}>
-						{option.label}
-					</option>
-				))}
-			</select>
+						onChange(selectedItems);
+					}}
+					size={size}
+					value={value}
+				>
+					{items.map((option: any) => (
+						<option
+							className="select-box-option"
+							key={option.value}
+							value={option.value}
+						>
+							{option.label}
+						</option>
+					))}
+				</select>
+				{showArrows && (
+					<ClayButton.Group className="select-box-order-buttons">
+						<ClayButtonWithIcon
+							className="select-box-order-button"
+							disabled={value.length ? false : true}
+							displayType="secondary"
+							onClick={() =>
+								onItemsChange(reorderUp(items, selectedIndexes))
+							}
+							spritemap={spritemap}
+							symbol="caret-top"
+						/>
 
-			{showArrows && (
-				<ClayButton.Group className="order-buttons">
-					<ClayButtonWithIcon
-						disabled={value.length ? false : true}
-						displayType="secondary"
-						onClick={() => {
-							const reordered = reorderUp(
-								options,
-								selectedIndexes
-							);
-
-							setOptions(reordered);
-						}}
-						spritemap={spritemap}
-						symbol="caret-top"
-					/>
-					<ClayButtonWithIcon
-						disabled={value.length ? false : true}
-						displayType="secondary"
-						onClick={() => {
-							const reordered = reorderDown(
-								options,
-								selectedIndexes
-							);
-
-							setOptions(reordered);
-						}}
-						spritemap={spritemap}
-						symbol="caret-bottom"
-					/>
-				</ClayButton.Group>
-			)}
-		</ClayInput.Group>
+						<ClayButtonWithIcon
+							className="select-box-order-button"
+							disabled={value.length ? false : true}
+							displayType="secondary"
+							onClick={() =>
+								onItemsChange(
+									reorderDown(items, selectedIndexes)
+								)
+							}
+							spritemap={spritemap}
+							symbol="caret-bottom"
+						/>
+					</ClayButton.Group>
+				)}
+			</div>
+		</div>
 	);
 };
 
