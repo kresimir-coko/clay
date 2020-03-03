@@ -76,21 +76,43 @@ const moveBoxesOptions = [
 
 storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => (
 	<ClayInputMoveBoxes
-		leftSelectLabel="In Use"
-		options={moveBoxesOptions}
-		rightSelectLabel="Available"
+		left={{
+			items: moveBoxesOptions[0],
+			label: 'In Use',
+			onChange: () => {},
+			onSelectChange: () => {},
+			selected: [],
+		}}
+		right={{
+			items: moveBoxesOptions[1],
+			label: 'Available',
+			onChange: () => {},
+			onSelectChange: () => {},
+			selected: [],
+		}}
 		size={8}
 		spritemap={spritemap}
 	/>
 ));
 
-// storiesOf('Components|ClaySelectBox', module).add('default', () => (
-// 	<ClaySelectBox
-// 		items={moveBoxesOptions}
-// 		label="In Use"
-// 		spritemap={spritemap}
-// 	/>
-// ));
+storiesOf('Components|ClaySelectBox', module).add('default', () => {
+	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions[0]);
+	const [value, setValue] = React.useState<Array<string>>([]);
+
+	return (
+		<ClaySelectBox
+			items={items}
+			label="In Use"
+			multiple
+			onChange={(value: Array<string>) => setValue(value)}
+			onItemsChange={(items: Array<string>) => setItems(items)}
+			showArrows
+			size={8}
+			spritemap={spritemap}
+			value={value}
+		/>
+	);
+});
 
 storiesOf('Components|ClayForm', module).add('Feedback', () => (
 	<div className="sheet">
