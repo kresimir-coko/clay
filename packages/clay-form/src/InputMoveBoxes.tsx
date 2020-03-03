@@ -20,47 +20,60 @@ function swapArrayItems(
 ) {
 	const [sourceArray, targetArray] = arrays;
 
-	const clonedSourceArray = [...sourceArray];
-	const clonedTargetArray = [...targetArray];
+	const newTargetArray = [...targetArray];
 
-	const removedItems: Array<any> = selectedIndexes.map((index: number) => {
-		clonedSourceArray.splice(index, 1);
-	});
+	const newSourceArray: Array<any> = sourceArray.filter(
+		(item: number, index: number) => {
+			if (selectedIndexes.includes(index)) {
+				newTargetArray.push(item);
 
-	removedItems.map(item => {
-		clonedTargetArray.push(item);
-	});
+				return false;
+			}
 
-	console.log('arrays: ', arrays);
-	console.log('selectedIndexes: ', selectedIndexes);
-	console.log('removedItems: ', removedItems);
+			return true;
+		}
+	);
 
-	return [clonedSourceArray, clonedTargetArray];
+	return [newSourceArray, newTargetArray];
 }
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
-	leftSelectLabel?: string;
-	options: Array<any>;
+	left: {
+		items: Array<any>;
+		label: string;
+		onChange: () => void;
+		onSelectChange: () => void;
+		selected: [];
+	};
+	right: {
+		items: Array<any>;
+		label: string;
+		onChange: () => void;
+		onSelectChange: () => void;
+		selected: [];
+	};
 	size?: number;
-	rightSelectLabel?: string;
 	spritemap?: string;
 }
 
 const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 	className,
-	leftSelectLabel,
-	options,
-	rightSelectLabel,
+	left,
+	right,
 	size,
 	spritemap,
 	...otherProps
 }) => {
-	const [itemsLeft, setItemsLeft] = React.useState(options[0]);
-	const [itemsRight, setItemsRight] = React.useState(options[1]);
-	const [selectedLeft, setSelectedLeft] = React.useState<Array<string>>([]);
-	const [selectedRight, setSelectedRight] = React.useState<Array<string>>([]);
+	const [itemsLeft, setItemsLeft] = React.useState(left.items);
+	const [itemsRight, setItemsRight] = React.useState(right.items);
+	const [selectedLeft, setSelectedLeft] = React.useState<Array<string>>(
+		left.selected
+	);
+	const [selectedRight, setSelectedRight] = React.useState<Array<string>>(
+		right.selected
+	);
 
-	const selectedIndexesLeft = options.reduce(
+	const selectedIndexesLeft = itemsLeft.reduce(
 		(acc: any, item: any, index: number) => {
 			if (selectedLeft.includes(item.value)) {
 				return [...acc, index];
@@ -71,7 +84,7 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 		[]
 	);
 
-	const selectedIndexesRight = options.reduce(
+	const selectedIndexesRight = itemsRight.reduce(
 		(acc: any, item: any, index: number) => {
 			if (selectedRight.includes(item.value)) {
 				return [...acc, index];
@@ -89,9 +102,10 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 		>
 			<ClaySelectBox
 				items={itemsLeft}
-				label={leftSelectLabel}
+				label={left.label}
 				multiple
 				onChange={(items: any) => setSelectedLeft(items)}
+				onItemsChange={setItemsLeft}
 				showArrows
 				size={size}
 				spritemap={spritemap}
@@ -100,6 +114,7 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 
 			<ClayButton.Group className="transfer-buttons">
 				<ClayButtonWithIcon
+					disabled={!selectedLeft.length}
 					displayType="secondary"
 					onClick={() => {
 						const [arrayLeft, arrayRight] = swapArrayItems(
@@ -109,12 +124,14 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 
 						setItemsLeft(arrayLeft);
 						setItemsRight(arrayRight);
+						setSelectedLeft([]);
 					}}
 					spritemap={spritemap}
 					symbol="caret-right"
 				/>
 
 				<ClayButtonWithIcon
+					disabled={!selectedRight.length}
 					displayType="secondary"
 					onClick={() => {
 						const [arrayRight, arrayLeft] = swapArrayItems(
@@ -124,6 +141,7 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 
 						setItemsLeft(arrayLeft);
 						setItemsRight(arrayRight);
+						setSelectedRight([]);
 					}}
 					spritemap={spritemap}
 					symbol="caret-left"
@@ -132,9 +150,10 @@ const ClayInputMoveBoxes: React.FunctionComponent<IProps> = ({
 
 			<ClaySelectBox
 				items={itemsRight}
-				label={rightSelectLabel}
+				label={right.label}
 				multiple
 				onChange={(items: any) => setSelectedRight(items)}
+				onItemsChange={setItemsLeft}
 				size={size}
 				value={selectedRight}
 			/>
