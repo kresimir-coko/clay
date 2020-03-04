@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering renders ClaySelectBox 1`] = `
+<div>
+  <div
+    class="form-group-autofit select-box"
+  >
+    <div
+      class="form-group-item"
+    >
+      <select
+        class="form-control select-box-select"
+      >
+        <option
+          class="select-box-option"
+          value="1"
+        >
+          Option 1
+        </option>
+        <option
+          class="select-box-option"
+          value="2"
+        >
+          Option 2
+        </option>
+        <option
+          class="select-box-option"
+          value="3"
+        >
+          Option 3
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Rendering renders ClaySelectBox with buttons to reorder options 1`] = `
+<div>
+  <div
+    class="form-group-autofit select-box"
+  >
+    <div
+      class="form-group-item"
+    >
+      <select
+        class="form-control select-box-select"
+        multiple=""
+      >
+        <option
+          class="select-box-option"
+          value="1"
+        >
+          Option 1
+        </option>
+        <option
+          class="select-box-option"
+          value="2"
+        >
+          Option 2
+        </option>
+        <option
+          class="select-box-option"
+          value="3"
+        >
+          Option 3
+        </option>
+      </select>
+      <div
+        class="select-box-order-buttons btn-group"
+        role="group"
+      >
+        <button
+          class="select-box-order-button select-box-order-button-up btn btn-monospaced btn-secondary"
+          type="button"
+        >
+          <svg
+            class="lexicon-icon lexicon-icon-caret-top"
+            role="presentation"
+          >
+            <use
+              xlink:href="/path/to/some/resource.svg#caret-top"
+            />
+          </svg>
+        </button>
+        <button
+          class="select-box-order-button select-box-order-button-down btn btn-monospaced btn-secondary"
+          type="button"
+        >
+          <svg
+            class="lexicon-icon lexicon-icon-caret-bottom"
+            role="presentation"
+          >
+            <use
+              xlink:href="/path/to/some/resource.svg#caret-bottom"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Rendering renders ClaySelectBox with multiple options selected 1`] = `
+<div>
+  <div
+    class="form-group-autofit select-box"
+  >
+    <div
+      class="form-group-item"
+    >
+      <select
+        class="form-control select-box-select"
+        multiple=""
+      >
+        <option
+          class="select-box-option"
+          value="1"
+        >
+          Option 1
+        </option>
+        <option
+          class="select-box-option"
+          value="2"
+        >
+          Option 2
+        </option>
+        <option
+          class="select-box-option"
+          value="3"
+        >
+          Option 3
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+`;
