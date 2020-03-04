@@ -121,7 +121,7 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 				{showArrows && (
 					<ClayButton.Group className="select-box-order-buttons">
 						<ClayButtonWithIcon
-							className="select-box-order-button"
+							className="select-box-order-button select-box-order-button-up"
 							disabled={value.length ? false : true}
 							displayType="secondary"
 							onClick={() =>
@@ -132,7 +132,7 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 						/>
 
 						<ClayButtonWithIcon
-							className="select-box-order-button"
+							className="select-box-order-button select-box-order-button-down"
 							disabled={value.length ? false : true}
 							displayType="secondary"
 							onClick={() =>

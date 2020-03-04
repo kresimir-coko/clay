@@ -74,26 +74,36 @@ const moveBoxesOptions = [
 	],
 ];
 
-storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => (
-	<ClayInputMoveBoxes
-		left={{
-			items: moveBoxesOptions[0],
-			label: 'In Use',
-			onChange: () => {},
-			onSelectChange: () => {},
-			selected: [],
-		}}
-		right={{
-			items: moveBoxesOptions[1],
-			label: 'Available',
-			onChange: () => {},
-			onSelectChange: () => {},
-			selected: [],
-		}}
-		size={8}
-		spritemap={spritemap}
-	/>
-));
+storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => {
+	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions);
+	const [leftSelected, setLeftSelected] = React.useState<Array<string>>([]);
+	const [rightSelected, setRightSelected] = React.useState<Array<string>>([]);
+
+	return (
+		<ClayInputMoveBoxes
+			left={{
+				items: items[0],
+				label: 'In Use',
+				onChange: (newLeftItems: Array<any>) =>
+					setItems([newLeftItems, items[1]]),
+				onSelectChange: (leftSelected: Array<any>) =>
+					setLeftSelected(leftSelected),
+				selected: leftSelected,
+			}}
+			right={{
+				items: items[1],
+				label: 'Available',
+				onChange: (newRightItems: Array<any>) =>
+					setItems([items[1], newRightItems]),
+				onSelectChange: (rightSelected: Array<any>) =>
+					setRightSelected(rightSelected),
+				selected: rightSelected,
+			}}
+			size={8}
+			spritemap={spritemap}
+		/>
+	);
+});
 
 storiesOf('Components|ClaySelectBox', module).add('default', () => {
 	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions[0]);
