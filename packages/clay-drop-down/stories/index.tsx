@@ -7,6 +7,7 @@ import '@clayui/css/lib/css/atlas.css';
 import ClayButton from '@clayui/button';
 const spritemap = require('@clayui/css/lib/images/icons/icons.svg');
 import {ClayCheckbox, ClayRadio} from '@clayui/form';
+import ClayLabel from '@clayui/label';
 import {boolean, select} from '@storybook/addon-knobs';
 import {storiesOf} from '@storybook/react';
 import React from 'react';
@@ -38,7 +39,7 @@ const DropDownWithState: React.FunctionComponent<any> = ({
 
 storiesOf('Components|ClayDropDown', module)
 	.add('default', () => (
-		<DropDownWithState>
+		<DropDownWithState hasRightSymbols>
 			<ClayDropDown.ItemList>
 				{[
 					{href: '#one', label: 'one'},
@@ -48,6 +49,10 @@ storiesOf('Components|ClayDropDown', module)
 				].map(({href, label, ...otherProps}, i) => (
 					<ClayDropDown.Item href={href} key={i} {...otherProps}>
 						{label}
+
+						<ClayLabel className="dropdown-item-indicator-end">
+							{'test'}
+						</ClayLabel>
 					</ClayDropDown.Item>
 				))}
 			</ClayDropDown.ItemList>
