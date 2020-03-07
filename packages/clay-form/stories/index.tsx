@@ -8,12 +8,12 @@ import React from 'react';
 
 import {
 	ClayCheckbox,
+	ClayDualListbox,
 	ClayInput,
-	ClayInputMoveBoxes,
 	ClayRadio,
 	ClayRadioGroup,
+	ClayReorder,
 	ClaySelect,
-	ClaySelectBox,
 	ClaySelectWithOption,
 	ClayToggle,
 } from '../src';
@@ -74,18 +74,27 @@ const moveBoxesOptions = [
 	],
 ];
 
-storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => {
+storiesOf('Components|ClayDualListbox', module).add('default', () => {
 	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions);
+	const [leftItems, setLeftItems] = React.useState<Array<any>>(
+		moveBoxesOptions[0]
+	);
+	const [rightItems, setRightItems] = React.useState<Array<any>>(
+		moveBoxesOptions[1]
+	);
 	const [leftSelected, setLeftSelected] = React.useState<Array<string>>([]);
 	const [rightSelected, setRightSelected] = React.useState<Array<string>>([]);
+	console.log(leftSelected);
 
 	return (
-		<ClayInputMoveBoxes
+		<ClayDualListbox
 			left={{
-				items: items[0],
+				items: leftItems,
 				label: 'In Use',
-				onChange: (newLeftItems: Array<any>) =>
-					setItems([newLeftItems, items[1]]),
+				onChange: (newLeftItems: Array<any>) => {
+					setItems([newLeftItems, rightItems]);
+					setLeftItems(newLeftItems);
+				},
 				onSelectChange: (leftSelected: Array<any>) =>
 					setLeftSelected(leftSelected),
 				selected: leftSelected,
@@ -93,8 +102,10 @@ storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => {
 			right={{
 				items: items[1],
 				label: 'Available',
-				onChange: (newRightItems: Array<any>) =>
-					setItems([items[1], newRightItems]),
+				onChange: (newRightItems: Array<any>) => {
+					setItems([leftItems, newRightItems]);
+					setRightItems(newRightItems);
+				},
 				onSelectChange: (rightSelected: Array<any>) =>
 					setRightSelected(rightSelected),
 				selected: rightSelected,
@@ -105,12 +116,12 @@ storiesOf('Components|ClayInputMoveBoxes', module).add('default', () => {
 	);
 });
 
-storiesOf('Components|ClaySelectBox', module).add('default', () => {
+storiesOf('Components|ClayReorder', module).add('default', () => {
 	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions[0]);
 	const [value, setValue] = React.useState<Array<string>>([]);
 
 	return (
-		<ClaySelectBox
+		<ClayReorder
 			items={items}
 			label="In Use"
 			multiple

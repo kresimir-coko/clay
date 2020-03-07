@@ -4,24 +4,24 @@
  */
 
 import ClayCheckbox from './Checkbox';
+import ClayDualListbox from './DualListbox';
 import ClayForm from './Form';
 import ClayInput from './Input';
-import ClayInputMoveBoxes from './InputMoveBoxes';
 import ClayRadio from './Radio';
 import ClayRadioGroup from './RadioGroup';
+import ClayReorder from './Reorder';
 import ClaySelect from './Select';
-import ClaySelectBox from './SelectBox';
 import ClaySelectWithOption from './SelectWithOption';
 import ClayToggle from './Toggle';
 
 export {
 	ClayCheckbox,
 	ClayInput,
-	ClayInputMoveBoxes,
+	ClayDualListbox,
 	ClayRadio,
 	ClayRadioGroup,
 	ClaySelect,
-	ClaySelectBox,
+	ClayReorder,
 	ClaySelectWithOption,
 	ClayToggle,
 };

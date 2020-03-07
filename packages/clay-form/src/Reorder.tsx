@@ -52,6 +52,7 @@ function reorderDown(array: Array<any>, selectedIndexes: Array<number>) {
 }
 
 interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+	buttonAlignment?: string;
 	items: Array<any>;
 	label?: string;
 	multiple?: boolean;
@@ -64,7 +65,8 @@ interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 	spritemap?: string;
 }
 
-const ClaySelectBox: React.FunctionComponent<IProps> = ({
+const ClayReorder: React.FunctionComponent<IProps> = ({
+	buttonAlignment = 'right',
 	className,
 	items,
 	label,
@@ -88,15 +90,14 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 	);
 
 	return (
-		<div className="form-group-autofit select-box">
-			<div className="form-group-item">
-				{label && <label className="select-box-label">{label}</label>}
+		<div className={classNames(className, 'form-group')}>
+			{label && <label className="reorder-label">{label}</label>}
 
+			<div
+				className={`clay-reorder clay-reorder-footer-${buttonAlignment}`}
+			>
 				<select
-					className={classNames(
-						className,
-						'form-control select-box-select'
-					)}
+					className="form-control form-control-inset"
 					multiple={multiple}
 					onChange={event => {
 						const selectedItems = [...event.target.options]
@@ -110,7 +111,7 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 				>
 					{items.map((option: any) => (
 						<option
-							className="select-box-option"
+							className="reorder-option"
 							key={option.value}
 							value={option.value}
 						>
@@ -118,36 +119,43 @@ const ClaySelectBox: React.FunctionComponent<IProps> = ({
 						</option>
 					))}
 				</select>
-				{showArrows && (
-					<ClayButton.Group className="select-box-order-buttons">
-						<ClayButtonWithIcon
-							className="select-box-order-button select-box-order-button-up"
-							disabled={value.length ? false : true}
-							displayType="secondary"
-							onClick={() =>
-								onItemsChange(reorderUp(items, selectedIndexes))
-							}
-							spritemap={spritemap}
-							symbol="caret-top"
-						/>
 
-						<ClayButtonWithIcon
-							className="select-box-order-button select-box-order-button-down"
-							disabled={value.length ? false : true}
-							displayType="secondary"
-							onClick={() =>
-								onItemsChange(
-									reorderDown(items, selectedIndexes)
-								)
-							}
-							spritemap={spritemap}
-							symbol="caret-bottom"
-						/>
-					</ClayButton.Group>
+				<div className="clay-reorder-underlay form-control" />
+
+				{showArrows && (
+					<div className="clay-reorder-footer">
+						<ClayButton.Group className="reorder-order-buttons">
+							<ClayButtonWithIcon
+								className="reorder-button reorder-button-up"
+								disabled={value.length ? false : true}
+								displayType="secondary"
+								onClick={() =>
+									onItemsChange(
+										reorderUp(items, selectedIndexes)
+									)
+								}
+								spritemap={spritemap}
+								symbol="caret-top"
+							/>
+
+							<ClayButtonWithIcon
+								className="reorder-button reorder-button-down"
+								disabled={value.length ? false : true}
+								displayType="secondary"
+								onClick={() =>
+									onItemsChange(
+										reorderDown(items, selectedIndexes)
+									)
+								}
+								spritemap={spritemap}
+								symbol="caret-bottom"
+							/>
+						</ClayButton.Group>
+					</div>
 				)}
 			</div>
 		</div>
 	);
 };
 
-export default ClaySelectBox;
+export default ClayReorder;

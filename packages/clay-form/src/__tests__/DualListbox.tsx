@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClayInputMoveBoxes} from '..';
-import {cleanup, render, fireEvent} from '@testing-library/react';
+import {ClayDualListbox} from '..';
+import {cleanup, fireEvent, render, getByTestId} from '@testing-library/react';
 import React from 'react';
 
 const options = [
@@ -37,9 +37,9 @@ const options = [
 describe('Rendering', () => {
 	afterEach(cleanup);
 
-	it('renders ClayInputMoveBoxes', () => {
+	it('renders ClayDualListbox', () => {
 		const {container} = render(
-			<ClayInputMoveBoxes
+			<ClayDualListbox
 				left={{
 					items: options[0],
 					label: 'In Use',
@@ -74,18 +74,42 @@ describe('Interactions', () => {
 
 	it('transfers selected options from left box to the right', () => {
 		const {container} = render(
-			<ClayInputMoveBoxes
+			<ClayDualListbox
 				left={{
 					items: options[0],
 					label: 'In Use',
-					onChange: handleOnItemsChange,
+					onChange: () =>
+						handleOnItemsChange([
+							{
+								label: 'Option 2',
+								value: '2',
+							},
+							{
+								label: 'Option 3',
+								value: '3',
+							},
+						]),
 					onSelectChange: () => {},
 					selected: ['1'],
 				}}
 				right={{
 					items: options[1],
 					label: 'Available',
-					onChange: handleOnItemsChange,
+					onChange: () =>
+						handleOnItemsChange([
+							{
+								label: 'Option 4',
+								value: '4',
+							},
+							{
+								label: 'Option 5',
+								value: '5',
+							},
+							{
+								label: 'Option 1',
+								value: '1',
+							},
+						]),
 					onSelectChange: () => {},
 					selected: [''],
 				}}
@@ -98,14 +122,14 @@ describe('Interactions', () => {
 			'.transfer-button-ltr'
 		);
 
-		fireEvent.click(transferRightButton as HTMLObjectElement, {});
+		fireEvent.click(transferRightButton as HTMLButtonElement, {});
 
 		expect(handleOnItemsChange).toHaveBeenCalled();
 
-		const rightSelectBox = container.querySelector(
-			'.select-box-right'
-		) as HTMLSelectElement;
+		// const rightReorder = container.querySelector(
+		// 	'.listbox-right select'
+		// ) as HTMLSelectElement;
 
-		// expect(rightSelectBox.options[2].value).toBe('1');
+		// expect(rightReorder.options[2].value).toBe('1');
 	});
 });

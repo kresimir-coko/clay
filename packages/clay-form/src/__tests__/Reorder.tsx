@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClaySelectBox} from '..';
+import {ClayReorder} from '..';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 import React from 'react';
 
@@ -25,11 +25,11 @@ const options = [
 describe('Rendering', () => {
 	afterEach(cleanup);
 
-	it('renders ClaySelectBox', () => {
+	it('renders ClayReorder', () => {
 		const {container} = render(
-			<ClaySelectBox
+			<ClayReorder
 				aria-label="Select Box Label"
-				id="mySelectBoxId"
+				id="myReorderId"
 				items={options}
 				onChange={() => {}}
 				value={'1'}
@@ -39,11 +39,11 @@ describe('Rendering', () => {
 		expect(container).toMatchSnapshot();
 	});
 
-	it('renders ClaySelectBox with multiple options selected', () => {
+	it('renders ClayReorder with multiple options selected', () => {
 		const {container} = render(
-			<ClaySelectBox
+			<ClayReorder
 				aria-label="Select Box Label"
-				id="mySelectBoxId"
+				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -54,11 +54,11 @@ describe('Rendering', () => {
 		expect(container).toMatchSnapshot();
 	});
 
-	it('renders ClaySelectBox with buttons to reorder options', () => {
+	it('renders ClayReorder with buttons to reorder options', () => {
 		const {container} = render(
-			<ClaySelectBox
+			<ClayReorder
 				aria-label="Select Box Label"
-				id="mySelectBoxId"
+				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -82,11 +82,11 @@ describe('Interactions', () => {
 		cleanup();
 	});
 
-	it('changes order of options in ClaySelectBox when reorder up button is clicked', () => {
+	it('changes order of options in ClayReorder when reorder up button is clicked', () => {
 		const {container} = render(
-			<ClaySelectBox
+			<ClayReorder
 				aria-label="Select Box Label"
-				id="mySelectBoxId"
+				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -98,7 +98,7 @@ describe('Interactions', () => {
 		);
 
 		const reorderUpButton = container.querySelector(
-			'.select-box-order-button-up'
+			'.reorder-order-button-up'
 		);
 
 		fireEvent.click(reorderUpButton as HTMLButtonElement, {});
@@ -114,9 +114,9 @@ describe('Interactions', () => {
 
 	it('selects multiple options', () => {
 		const {container} = render(
-			<ClaySelectBox
+			<ClayReorder
 				aria-label="Select Box Label"
-				id="mySelectBoxId"
+				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
