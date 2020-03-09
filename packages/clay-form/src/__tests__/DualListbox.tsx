@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClayDualListbox} from '..';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 import React from 'react';
+
+import ClayDualListbox from '../DualListbox';
 
 const options = [
 	[

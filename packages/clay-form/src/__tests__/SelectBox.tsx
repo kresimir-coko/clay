@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClayReorder} from '..';
 import {cleanup, fireEvent, render} from '@testing-library/react';
 import React from 'react';
+
+import ClaySelectBox from '../SelectBox';
 
 const options = [
 	{
@@ -25,9 +26,9 @@ const options = [
 describe('Rendering', () => {
 	afterEach(cleanup);
 
-	it('renders ClayReorder', () => {
+	it('renders ClaySelectBox', () => {
 		const {container} = render(
-			<ClayReorder
+			<ClaySelectBox
 				aria-label="Select Box Label"
 				items={options}
 				onChange={() => {}}
@@ -38,9 +39,9 @@ describe('Rendering', () => {
 		expect(container).toMatchSnapshot();
 	});
 
-	it('renders ClayReorder with multiple options selected', () => {
+	it('renders ClaySelectBox with multiple options selected', () => {
 		const {container} = render(
-			<ClayReorder
+			<ClaySelectBox
 				aria-label="Select Box Label"
 				items={options}
 				multiple
@@ -52,9 +53,9 @@ describe('Rendering', () => {
 		expect(container).toMatchSnapshot();
 	});
 
-	it('renders ClayReorder with buttons to reorder options', () => {
+	it('renders ClaySelectBox with buttons to reorder options', () => {
 		const {container} = render(
-			<ClayReorder
+			<ClaySelectBox
 				aria-label="Select Box Label"
 				items={options}
 				multiple
@@ -73,10 +74,10 @@ describe('Rendering', () => {
 describe('Interactions', () => {
 	afterEach(cleanup);
 
-	it('changes order of options in ClayReorder when reorder up button is clicked', () => {
+	it('changes order of options in ClaySelectBox when reorder up button is clicked', () => {
 		const handleOnItemsChange = jest.fn();
 		const {container} = render(
-			<ClayReorder
+			<ClaySelectBox
 				aria-label="Select Box Label"
 				items={options}
 				multiple
@@ -103,7 +104,7 @@ describe('Interactions', () => {
 
 	it('selects multiple options', () => {
 		const {container} = render(
-			<ClayReorder
+			<ClaySelectBox
 				aria-label="Select Box Label"
 				items={options}
 				multiple

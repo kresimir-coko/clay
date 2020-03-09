@@ -12,8 +12,8 @@ import {
 	ClayInput,
 	ClayRadio,
 	ClayRadioGroup,
-	ClayReorder,
 	ClaySelect,
+	ClaySelectBox,
 	ClaySelectWithOption,
 	ClayToggle,
 } from '../src';
@@ -116,12 +116,12 @@ storiesOf('Components|ClayDualListbox', module).add('default', () => {
 	);
 });
 
-storiesOf('Components|ClayReorder', module).add('default', () => {
+storiesOf('Components|ClaySelectBox', module).add('default', () => {
 	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions[0]);
 	const [value, setValue] = React.useState<Array<string>>([]);
 
 	return (
-		<ClayReorder
+		<ClaySelectBox
 			items={items}
 			label="In Use"
 			multiple

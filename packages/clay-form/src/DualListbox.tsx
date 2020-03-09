@@ -9,10 +9,11 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {ClayReorder} from '.';
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import classNames from 'classnames';
 import React from 'react';
+
+import ClaySelectBox from './SelectBox';
 
 function swapArrayItems(
 	arrays: [Array<any>, Array<any>],
@@ -89,7 +90,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 	return (
 		<div {...otherProps} className={classNames(className, 'form-group')}>
 			<div className="clay-dual-listbox">
-				<ClayReorder
+				<ClaySelectBox
 					className="clay-dual-listbox-item clay-dual-listbox-item-expand listbox-left"
 					items={left.items}
 					label={left.label}
@@ -140,7 +141,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 					/>
 				</ClayButton.Group>
 
-				<ClayReorder
+				<ClaySelectBox
 					className="clay-dual-listbox-item clay-dual-listbox-item-expand listbox-right"
 					items={right.items}
 					label={right.label}

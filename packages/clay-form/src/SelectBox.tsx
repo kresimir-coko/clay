@@ -65,7 +65,7 @@ interface IProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 	spritemap?: string;
 }
 
-const ClayReorder: React.FunctionComponent<IProps> = ({
+const ClaySelectBox: React.FunctionComponent<IProps> = ({
 	buttonAlignment = 'right',
 	className,
 	items,
@@ -158,4 +158,4 @@ const ClayReorder: React.FunctionComponent<IProps> = ({
 	);
 };
 
-export default ClayReorder;
+export default ClaySelectBox;

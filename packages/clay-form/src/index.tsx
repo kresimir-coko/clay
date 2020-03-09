@@ -9,8 +9,8 @@ import ClayForm from './Form';
 import ClayInput from './Input';
 import ClayRadio from './Radio';
 import ClayRadioGroup from './RadioGroup';
-import ClayReorder from './Reorder';
 import ClaySelect from './Select';
+import ClaySelectBox from './SelectBox';
 import ClaySelectWithOption from './SelectWithOption';
 import ClayToggle from './Toggle';
 
@@ -21,7 +21,7 @@ export {
 	ClayRadio,
 	ClayRadioGroup,
 	ClaySelect,
-	ClayReorder,
+	ClaySelectBox,
 	ClaySelectWithOption,
 	ClayToggle,
 };
