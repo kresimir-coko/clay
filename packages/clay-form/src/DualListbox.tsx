@@ -105,6 +105,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 				<ClayButton.Group className="clay-dual-listbox-actions clay-dual-listbox-item">
 					<ClayButtonWithIcon
 						className="transfer-button-ltr"
+						data-testid="ltr"
 						disabled={!left.selected.length}
 						displayType="secondary"
 						onClick={() => {
@@ -122,6 +123,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 
 					<ClayButtonWithIcon
 						className="transfer-button-rtl"
+						data-testid="rtl"
 						disabled={!right.selected.length}
 						displayType="secondary"
 						onClick={() => {

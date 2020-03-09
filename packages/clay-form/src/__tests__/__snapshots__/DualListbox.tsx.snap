@@ -89,6 +89,7 @@ exports[`Rendering renders ClayDualListbox 1`] = `
       >
         <button
           class="transfer-button-ltr btn btn-monospaced btn-secondary"
+          data-testid="ltr"
           type="button"
         >
           <svg
@@ -102,6 +103,7 @@ exports[`Rendering renders ClayDualListbox 1`] = `
         </button>
         <button
           class="transfer-button-rtl btn btn-monospaced btn-secondary"
+          data-testid="rtl"
           type="button"
         >
           <svg

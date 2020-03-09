@@ -29,7 +29,6 @@ describe('Rendering', () => {
 		const {container} = render(
 			<ClayReorder
 				aria-label="Select Box Label"
-				id="myReorderId"
 				items={options}
 				onChange={() => {}}
 				value={'1'}
@@ -43,7 +42,6 @@ describe('Rendering', () => {
 		const {container} = render(
 			<ClayReorder
 				aria-label="Select Box Label"
-				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -58,7 +56,6 @@ describe('Rendering', () => {
 		const {container} = render(
 			<ClayReorder
 				aria-label="Select Box Label"
-				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -74,19 +71,13 @@ describe('Rendering', () => {
 });
 
 describe('Interactions', () => {
-	const handleOnItemsChange = jest.fn();
-
-	afterEach(() => {
-		handleOnItemsChange.mockReset();
-
-		cleanup();
-	});
+	afterEach(cleanup);
 
 	it('changes order of options in ClayReorder when reorder up button is clicked', () => {
+		const handleOnItemsChange = jest.fn();
 		const {container} = render(
 			<ClayReorder
 				aria-label="Select Box Label"
-				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}
@@ -97,15 +88,13 @@ describe('Interactions', () => {
 			/>
 		);
 
-		const reorderUpButton = container.querySelector(
-			'.reorder-order-button-up'
-		);
+		const reorderUpButton = container.querySelector('.reorder-button-up');
+
+		expect(handleOnItemsChange).not.toHaveBeenCalled();
 
 		fireEvent.click(reorderUpButton as HTMLButtonElement, {});
 
-		expect(handleOnItemsChange).toHaveBeenCalled();
-
-		expect(handleOnItemsChange.mock.calls[0][0]).toEqual([
+		expect(handleOnItemsChange).toHaveBeenCalledWith([
 			{label: 'Option 2', value: '2'},
 			{label: 'Option 1', value: '1'},
 			{label: 'Option 3', value: '3'},
@@ -116,7 +105,6 @@ describe('Interactions', () => {
 		const {container} = render(
 			<ClayReorder
 				aria-label="Select Box Label"
-				id="myReorderId"
 				items={options}
 				multiple
 				onChange={() => {}}

@@ -4,7 +4,7 @@
  */
 
 import {ClayDualListbox} from '..';
-import {cleanup, fireEvent, render, getByTestId} from '@testing-library/react';
+import {cleanup, fireEvent, render} from '@testing-library/react';
 import React from 'react';
 
 const options = [
@@ -64,52 +64,25 @@ describe('Rendering', () => {
 });
 
 describe('Interactions', () => {
-	const handleOnItemsChange = jest.fn();
+	afterEach(cleanup);
 
-	afterEach(() => {
-		handleOnItemsChange.mockReset();
+	it("calls left box's onChange event when transfering from left to right", () => {
+		const handleLeftChange = jest.fn();
+		const handleRightChange = jest.fn();
 
-		cleanup();
-	});
-
-	it('transfers selected options from left box to the right', () => {
-		const {container} = render(
+		const {getByTestId} = render(
 			<ClayDualListbox
 				left={{
 					items: options[0],
 					label: 'In Use',
-					onChange: () =>
-						handleOnItemsChange([
-							{
-								label: 'Option 2',
-								value: '2',
-							},
-							{
-								label: 'Option 3',
-								value: '3',
-							},
-						]),
+					onChange: handleLeftChange,
 					onSelectChange: () => {},
-					selected: ['1'],
+					selected: ['2'],
 				}}
 				right={{
 					items: options[1],
 					label: 'Available',
-					onChange: () =>
-						handleOnItemsChange([
-							{
-								label: 'Option 4',
-								value: '4',
-							},
-							{
-								label: 'Option 5',
-								value: '5',
-							},
-							{
-								label: 'Option 1',
-								value: '1',
-							},
-						]),
+					onChange: handleRightChange,
 					onSelectChange: () => {},
 					selected: [''],
 				}}
@@ -118,18 +91,56 @@ describe('Interactions', () => {
 			/>
 		);
 
-		const transferRightButton = container.querySelector(
-			'.transfer-button-ltr'
+		expect(handleLeftChange).not.toHaveBeenCalled();
+
+		fireEvent.click(getByTestId('ltr') as HTMLButtonElement, {});
+
+		expect(handleLeftChange).toHaveBeenCalledWith([
+			{
+				label: 'Option 1',
+				value: '1',
+			},
+			{
+				label: 'Option 3',
+				value: '3',
+			},
+		]);
+	});
+
+	it("calls left box's onChange event when transfering from right to left", () => {
+		const handleLeftChange = jest.fn();
+		const handleRightChange = jest.fn();
+
+		const {getByTestId} = render(
+			<ClayDualListbox
+				left={{
+					items: options[0],
+					label: 'In Use',
+					onChange: handleLeftChange,
+					onSelectChange: () => {},
+					selected: [],
+				}}
+				right={{
+					items: options[1],
+					label: 'Available',
+					onChange: handleRightChange,
+					onSelectChange: () => {},
+					selected: ['5'],
+				}}
+				size={8}
+				spritemap="/path/to/some/resource.svg"
+			/>
 		);
 
-		fireEvent.click(transferRightButton as HTMLButtonElement, {});
+		expect(handleRightChange).not.toHaveBeenCalled();
 
-		expect(handleOnItemsChange).toHaveBeenCalled();
+		fireEvent.click(getByTestId('rtl') as HTMLButtonElement, {});
 
-		// const rightReorder = container.querySelector(
-		// 	'.listbox-right select'
-		// ) as HTMLSelectElement;
-
-		// expect(rightReorder.options[2].value).toBe('1');
+		expect(handleRightChange).toHaveBeenCalledWith([
+			{
+				label: 'Option 4',
+				value: '4',
+			},
+		]);
 	});
 });
