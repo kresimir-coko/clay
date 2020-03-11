@@ -39,17 +39,15 @@ function swapArrayItems(
 }
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
+	items: Array<any>;
+	onChange: any;
 	left: {
-		items: Array<any>;
 		label: string;
-		onChange: any;
 		onSelectChange: any;
 		selected: Array<string>;
 	};
 	right: {
-		items: Array<any>;
 		label: string;
-		onChange: any;
 		onSelectChange: any;
 		selected: Array<string>;
 	};
@@ -59,13 +57,17 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const ClayDualListbox: React.FunctionComponent<IProps> = ({
 	className,
+	items,
 	left,
+	onChange,
 	right,
 	size,
 	spritemap,
 	...otherProps
 }) => {
-	const selectedIndexesLeft = left.items.reduce(
+	const [leftItems, rightItems] = items;
+
+	const selectedIndexesLeft = leftItems.reduce(
 		(acc: any, item: any, index: number) => {
 			if (left.selected.includes(item.value)) {
 				return [...acc, index];
@@ -76,7 +78,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 		[]
 	);
 
-	const selectedIndexesRight = right.items.reduce(
+	const selectedIndexesRight = rightItems.reduce(
 		(acc: any, item: any, index: number) => {
 			if (right.selected.includes(item.value)) {
 				return [...acc, index];
@@ -92,11 +94,13 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 			<div className="clay-dual-listbox">
 				<ClaySelectBox
 					className="clay-dual-listbox-item clay-dual-listbox-item-expand listbox-left"
-					items={left.items}
+					items={leftItems}
 					label={left.label}
 					multiple
 					onChange={left.onSelectChange}
-					onItemsChange={left.onChange}
+					onItemsChange={(newLeftItems: any) =>
+						onChange([newLeftItems, rightItems])
+					}
 					showArrows
 					size={size}
 					spritemap={spritemap}
@@ -111,12 +115,11 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 						displayType="secondary"
 						onClick={() => {
 							const [arrayLeft, arrayRight] = swapArrayItems(
-								[left.items, right.items],
+								[leftItems, rightItems],
 								selectedIndexesLeft
 							);
 
-							left.onChange(arrayLeft);
-							right.onChange(arrayRight);
+							onChange([arrayLeft, arrayRight]);
 						}}
 						spritemap={spritemap}
 						symbol="caret-right"
@@ -129,12 +132,11 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 						displayType="secondary"
 						onClick={() => {
 							const [arrayRight, arrayLeft] = swapArrayItems(
-								[right.items, left.items],
+								[rightItems, leftItems],
 								selectedIndexesRight
 							);
 
-							left.onChange(arrayLeft);
-							right.onChange(arrayRight);
+							onChange([arrayLeft, arrayRight]);
 						}}
 						spritemap={spritemap}
 						symbol="caret-left"
@@ -143,11 +145,13 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 
 				<ClaySelectBox
 					className="clay-dual-listbox-item clay-dual-listbox-item-expand listbox-right"
-					items={right.items}
+					items={rightItems}
 					label={right.label}
 					multiple
 					onChange={right.onSelectChange}
-					onItemsChange={right.onChange}
+					onItemsChange={(newRightItems: any) =>
+						onChange([leftItems, newRightItems])
+					}
 					size={size}
 					value={right.selected}
 				/>
