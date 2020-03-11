@@ -41,17 +41,15 @@ describe('Rendering', () => {
 	it('renders ClayDualListbox', () => {
 		const {container} = render(
 			<ClayDualListbox
+				items={options}
 				left={{
-					items: options[0],
 					label: 'In Use',
-					onChange: () => {},
 					onSelectChange: () => {},
 					selected: [''],
 				}}
+				onChange={() => {}}
 				right={{
-					items: options[1],
 					label: 'Available',
-					onChange: () => {},
 					onSelectChange: () => {},
 					selected: [''],
 				}}
@@ -67,64 +65,20 @@ describe('Rendering', () => {
 describe('Interactions', () => {
 	afterEach(cleanup);
 
-	it("calls left box's onChange event when transfering from left to right", () => {
-		const handleLeftChange = jest.fn();
-		const handleRightChange = jest.fn();
+	it('calls onChange event when transfering items', () => {
+		const handleChange = jest.fn();
 
 		const {getByTestId} = render(
 			<ClayDualListbox
+				items={options}
 				left={{
-					items: options[0],
 					label: 'In Use',
-					onChange: handleLeftChange,
 					onSelectChange: () => {},
 					selected: ['2'],
 				}}
+				onChange={handleChange}
 				right={{
-					items: options[1],
 					label: 'Available',
-					onChange: handleRightChange,
-					onSelectChange: () => {},
-					selected: [''],
-				}}
-				size={8}
-				spritemap="/path/to/some/resource.svg"
-			/>
-		);
-
-		expect(handleLeftChange).not.toHaveBeenCalled();
-
-		fireEvent.click(getByTestId('ltr') as HTMLButtonElement, {});
-
-		expect(handleLeftChange).toHaveBeenCalledWith([
-			{
-				label: 'Option 1',
-				value: '1',
-			},
-			{
-				label: 'Option 3',
-				value: '3',
-			},
-		]);
-	});
-
-	it("calls left box's onChange event when transfering from right to left", () => {
-		const handleLeftChange = jest.fn();
-		const handleRightChange = jest.fn();
-
-		const {getByTestId} = render(
-			<ClayDualListbox
-				left={{
-					items: options[0],
-					label: 'In Use',
-					onChange: handleLeftChange,
-					onSelectChange: () => {},
-					selected: [],
-				}}
-				right={{
-					items: options[1],
-					label: 'Available',
-					onChange: handleRightChange,
 					onSelectChange: () => {},
 					selected: ['5'],
 				}}
@@ -133,15 +87,64 @@ describe('Interactions', () => {
 			/>
 		);
 
-		expect(handleRightChange).not.toHaveBeenCalled();
+		expect(handleChange).not.toHaveBeenCalled();
+
+		fireEvent.click(getByTestId('ltr') as HTMLButtonElement, {});
+
+		expect(handleChange).toHaveBeenCalledWith([
+			[
+				{
+					label: 'Option 1',
+					value: '1',
+				},
+				{
+					label: 'Option 3',
+					value: '3',
+				},
+			],
+			[
+				{
+					label: 'Option 4',
+					value: '4',
+				},
+				{
+					label: 'Option 5',
+					value: '5',
+				},
+				{
+					label: 'Option 2',
+					value: '2',
+				},
+			],
+		]);
 
 		fireEvent.click(getByTestId('rtl') as HTMLButtonElement, {});
 
-		expect(handleRightChange).toHaveBeenCalledWith([
-			{
-				label: 'Option 4',
-				value: '4',
-			},
+		expect(handleChange).toHaveBeenCalledWith([
+			[
+				{
+					label: 'Option 1',
+					value: '1',
+				},
+				{
+					label: 'Option 2',
+					value: '2',
+				},
+				{
+					label: 'Option 3',
+					value: '3',
+				},
+				{
+					label: 'Option 5',
+					value: '5',
+				},
+			],
+			[
+				{
+					label: 'Option 4',
+					value: '4',
+				},
+			],
 		]);
 	});
 });
