@@ -77,13 +77,13 @@ const moveBoxesOptions = [
 storiesOf('Components|ClayDualListbox', module).add('default', () => {
 	const [items, setItems] = React.useState<Array<any>>(moveBoxesOptions);
 	const [leftSelected, setLeftSelected] = React.useState<Array<string>>([]);
-	const [rightSelected, setRightSelected] = React.useState<Array<string>>([]);
 
 	return (
 		<ClayDualListbox
 			items={items}
 			left={{
 				label: 'In Use',
+				// These should be optional
 				onSelectChange: (leftSelected: Array<any>) =>
 					setLeftSelected(leftSelected),
 				selected: leftSelected,
@@ -91,9 +91,6 @@ storiesOf('Components|ClayDualListbox', module).add('default', () => {
 			onChange={setItems}
 			right={{
 				label: 'Available',
-				onSelectChange: (rightSelected: Array<any>) =>
-					setRightSelected(rightSelected),
-				selected: rightSelected,
 			}}
 			size={8}
 			spritemap={spritemap}

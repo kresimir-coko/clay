@@ -43,13 +43,13 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	onChange: any;
 	left: {
 		label: string;
-		onSelectChange: any;
-		selected: Array<string>;
+		onSelectChange?: any;
+		selected?: Array<string>;
 	};
 	right: {
 		label: string;
-		onSelectChange: any;
-		selected: Array<string>;
+		onSelectChange?: any;
+		selected?: Array<string>;
 	};
 	size?: number;
 	spritemap?: string;
@@ -65,11 +65,26 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 	spritemap,
 	...otherProps
 }) => {
+	const [internalLeftSelected, setInternalLeftSelected] = React.useState(
+		left.selected || []
+	);
+	const [internalRightSelected, setInternalRightSelected] = React.useState(
+		right.selected || []
+	);
+
+	const handleLeftSelectedChange =
+		left.onSelectChange || setInternalLeftSelected;
+	const handleRightSelectedChange =
+		right.onSelectChange || setInternalRightSelected;
+
+	const leftSelected = left.selected || internalLeftSelected;
+	const rightSelected = right.selected || internalRightSelected;
+
 	const [leftItems, rightItems] = items;
 
 	const selectedIndexesLeft = leftItems.reduce(
 		(acc: any, item: any, index: number) => {
-			if (left.selected.includes(item.value)) {
+			if (leftSelected.includes(item.value)) {
 				return [...acc, index];
 			}
 
@@ -80,7 +95,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 
 	const selectedIndexesRight = rightItems.reduce(
 		(acc: any, item: any, index: number) => {
-			if (right.selected.includes(item.value)) {
+			if (rightSelected.includes(item.value)) {
 				return [...acc, index];
 			}
 
@@ -97,21 +112,21 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 					items={leftItems}
 					label={left.label}
 					multiple
-					onChange={left.onSelectChange}
+					onChange={handleLeftSelectedChange}
 					onItemsChange={(newLeftItems: any) =>
 						onChange([newLeftItems, rightItems])
 					}
 					showArrows
 					size={size}
 					spritemap={spritemap}
-					value={left.selected}
+					value={leftSelected}
 				/>
 
 				<ClayButton.Group className="clay-dual-listbox-actions clay-dual-listbox-item">
 					<ClayButtonWithIcon
 						className="transfer-button-ltr"
 						data-testid="ltr"
-						disabled={!left.selected.length}
+						disabled={!leftSelected.length}
 						displayType="secondary"
 						onClick={() => {
 							const [arrayLeft, arrayRight] = swapArrayItems(
@@ -128,7 +143,7 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 					<ClayButtonWithIcon
 						className="transfer-button-rtl"
 						data-testid="rtl"
-						disabled={!right.selected.length}
+						disabled={!rightSelected.length}
 						displayType="secondary"
 						onClick={() => {
 							const [arrayRight, arrayLeft] = swapArrayItems(
@@ -148,12 +163,12 @@ const ClayDualListbox: React.FunctionComponent<IProps> = ({
 					items={rightItems}
 					label={right.label}
 					multiple
-					onChange={right.onSelectChange}
+					onChange={handleRightSelectedChange}
 					onItemsChange={(newRightItems: any) =>
 						onChange([leftItems, newRightItems])
 					}
 					size={size}
-					value={right.selected}
+					value={rightSelected}
 				/>
 			</div>
 		</div>
