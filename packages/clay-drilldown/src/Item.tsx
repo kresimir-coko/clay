@@ -3,12 +3,6 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-/**
- * © 2019 Liferay, Inc. <https://liferay.com>
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import React from 'react';
@@ -43,33 +37,40 @@ const ClayDrilldownItem: React.FunctionComponent<IProps> = ({
 				'drilldown-current': current,
 			})}
 		>
-			<div className="drilldown-item-inner">
-				<div className="">
-					<a
-						className="component-action"
-						data-drilldown="prev"
-						href="#firstClayDrillDown.Item"
-						role="button"
-					>
-						<ClayIcon spritemap={spritemap} symbol="angle-left" />
-					</a>
-					<span className="">{title}</span>
+			{children ? (
+				children
+			) : (
+				<div className="drilldown-item-inner">
+					<div className="">
+						<a
+							className="component-action"
+							data-drilldown="prev"
+							href="#firstClayDrillDown.Item"
+							role="button"
+						>
+							<ClayIcon
+								spritemap={spritemap}
+								symbol="angle-left"
+							/>
+						</a>
+						<span className="">{title}</span>
+					</div>
+
+					<div className="" />
+
+					{items && (
+						<ul>
+							{items.map((item, i) => (
+								<li key={i}>
+									<a className="" href="#1">
+										{item.title}
+									</a>
+								</li>
+							))}
+						</ul>
+					)}
 				</div>
-
-				<div className="" />
-
-				{items && (
-					<ul>
-						{items.map((item, i) => (
-							<li key={i}>
-								<a className="" href="#1">
-									{item.title}
-								</a>
-							</li>
-						))}
-					</ul>
-				)}
-			</div>
+			)}
 		</div>
 	);
 };

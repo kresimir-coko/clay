@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-// @ts-nocheck
-
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import {LinkOrButton} from '@clayui/shared';
@@ -14,10 +12,13 @@ import React from 'react';
 import Item from './Item';
 
 type TItem = {
-	title?: string;
-	items?: Array<TItem>;
+	className?: string;
+	childIndex?: number;
 	href?: string;
+	items?: Array<TItem>;
 	onClick?: () => void;
+	symbol?: string;
+	title?: string;
 };
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,12 +28,12 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
 }
 
-function gatherMenus(items, index = 0, parentHeader) {
+function gatherMenus(items: Array<TItem>, index = 0, parentHeader = '') {
 	items = [...items];
 
 	let menus = [{index, items, parentHeader}];
 
-	items.forEach(item => {
+	items.forEach((item) => {
 		if (item.items) {
 			item.childIndex = index + 1;
 
@@ -48,19 +49,18 @@ function gatherMenus(items, index = 0, parentHeader) {
 
 const ClayDrilldown: React.FunctionComponent<IProps> & {
 	Item: typeof Item;
-} = ({className, items, spritemap, ...otherProps}) => {
+} = ({children, className, items, spritemap, ...otherProps}) => {
 	const [activeMenu, setActiveMenu] = React.useState(0);
 	const [nextMenu, setNextMenu] = React.useState(null);
-
 	const [transform, setTransform] = React.useState(false);
 
-	const menus = gatherMenus(items);
-
-	const handleNext = newActive => {
+	const handleNext = (newActive: number) => {
 		setNextMenu(newActive);
 	};
 
-	const handlePrev = newActive => {};
+	const handlePrev = (newActive: number) => {
+		setNextMenu(newActive);
+	};
 
 	React.useLayoutEffect(() => {
 		if (nextMenu !== null) {
@@ -71,114 +71,122 @@ const ClayDrilldown: React.FunctionComponent<IProps> & {
 	return (
 		<div {...otherProps} className={classNames('drilldown', className)}>
 			<div className="drilldown-inner" style={{overflow: 'visible'}}>
-				{menus.map((menu, i) => (
-					<div
-						className={classNames('drilldown-item', {
-							'drilldown-current':
-								nextMenu === i || activeMenu === i,
-							'drilldown-transition transitioning':
-								activeMenu === i || nextMenu === i,
-						})}
-						key={i}
-						onTransitionEnd={() => {
-							if (nextMenu === i) {
-								setActiveMenu(nextMenu);
+				{children
+					? children
+					: gatherMenus(items).map((menu, i) => (
+							<div
+								className={classNames('drilldown-item', {
+									'drilldown-current':
+										nextMenu === i || activeMenu === i,
+									'drilldown-transition transitioning':
+										activeMenu === i || nextMenu === i,
+								})}
+								key={i}
+								onTransitionEnd={() => {
+									if (nextMenu === i) {
+										setActiveMenu(nextMenu);
 
-								setNextMenu(null);
+										setNextMenu(null);
 
-								setTransform(false);
-							}
-						}}
-						style={
-							transform && nextMenu !== null
-								? {
-										transform: `translateX(-100%)`,
-								  }
-								: {}
-						}
-					>
-						<div className="drilldown-item-inner">
-							{menu.parentHeader && (
-								<>
-									<div className="dropdown-header">
-										<ClayButtonWithIcon
-											className="component-action dropdown-item-indicator-start"
-											onClick={() =>
-												handlePrev(menu.index - 1)
-											}
-											spritemap={spritemap}
-											symbol="angle-left"
-										/>
+										setTransform(false);
+									}
+								}}
+								style={
+									transform && nextMenu !== null
+										? {
+												transform: `translateX(-100%)`,
+										  }
+										: {}
+								}
+							>
+								<div className="drilldown-item-inner">
+									{menu.parentHeader && (
+										<>
+											<div className="dropdown-header">
+												<ClayButtonWithIcon
+													className="component-action dropdown-item-indicator-start"
+													onClick={() =>
+														handlePrev(
+															menu.index - 1
+														)
+													}
+													spritemap={spritemap}
+													symbol="angle-left"
+												/>
 
-										<span className="dropdown-item-indicator-text-start">
-											{menu.parentHeader}
-										</span>
-									</div>
+												<span className="dropdown-item-indicator-text-start">
+													{menu.parentHeader}
+												</span>
+											</div>
 
-									<div className="dropdown-divider" />
-								</>
-							)}
-
-							{menu.items && (
-								<ul className="nav nav-stacked">
-									{menu.items.map(
-										(
-											{
-												childIndex,
-												className,
-												items: childItems,
-												symbol,
-												title,
-												...other
-											},
-											j
-										) => (
-											<li key={j}>
-												<LinkOrButton
-													{...other}
-													buttonDisplayType="unstyled"
-													className={classNames(
-														'dropdown-item',
-														className
-													)}
-													onClick={() => {
-														handleNext(childIndex);
-													}}
-												>
-													{symbol && (
-														<span className="dropdown-item-indicator-start">
-															<ClayIcon
-																spritemap={
-																	spritemap
-																}
-																symbol={symbol}
-															/>
-														</span>
-													)}
-
-													<span className="dropdown-item-indicator-text-end">
-														{title}
-													</span>
-
-													{childItems && (
-														<span className="dropdown-item-indicator-end">
-															<ClayIcon
-																spritemap={
-																	spritemap
-																}
-																symbol="angle-right"
-															/>
-														</span>
-													)}
-												</LinkOrButton>
-											</li>
-										)
+											<div className="dropdown-divider" />
+										</>
 									)}
-								</ul>
-							)}
-						</div>
-					</div>
-				))}
+
+									{menu.items && (
+										<ul className="nav nav-stacked">
+											{menu.items.map(
+												(
+													{
+														childIndex,
+														className,
+														items: childItems,
+														symbol,
+														title,
+														...other
+													},
+													j
+												) => (
+													<li key={j}>
+														<LinkOrButton
+															{...other}
+															buttonDisplayType="unstyled"
+															className={classNames(
+																'dropdown-item',
+																className
+															)}
+															onClick={() => {
+																handleNext(
+																	childIndex
+																);
+															}}
+														>
+															{symbol && (
+																<span className="dropdown-item-indicator-start">
+																	<ClayIcon
+																		spritemap={
+																			spritemap
+																		}
+																		symbol={
+																			symbol
+																		}
+																	/>
+																</span>
+															)}
+
+															<span className="dropdown-item-indicator-text-end">
+																{title}
+															</span>
+
+															{childItems && (
+																<span className="dropdown-item-indicator-end">
+																	<ClayIcon
+																		spritemap={
+																			spritemap
+																		}
+																		symbol="angle-right"
+																	/>
+																</span>
+															)}
+														</LinkOrButton>
+													</li>
+												)
+											)}
+										</ul>
+									)}
+								</div>
+							</div>
+					  ))}
 			</div>
 		</div>
 	);
