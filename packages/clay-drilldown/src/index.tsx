@@ -22,10 +22,20 @@ type TItem = {
 };
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
+	/**
+	 * Determines the current menu to be displayed
+	 */
 	current?: boolean;
+
+	/**
+	 * List of items to be used by the Drilldown, required if you don't manually provide the children yourself
+	 */
 	items?: Array<TItem>;
+
+	/**
+	 * Path to the spritemap to be used by icons
+	 */
 	spritemap?: string;
-	title: string;
 }
 
 function gatherMenus(items: Array<TItem>, index = 0, parentHeader = '') {
@@ -51,7 +61,7 @@ const ClayDrilldown: React.FunctionComponent<IProps> & {
 	Item: typeof Item;
 } = ({children, className, items, spritemap, ...otherProps}) => {
 	const [activeMenu, setActiveMenu] = React.useState(0);
-	const [nextMenu, setNextMenu] = React.useState(null);
+	const [nextMenu, setNextMenu] = React.useState<null | number>(null);
 	const [transform, setTransform] = React.useState(false);
 
 	const handleNext = (newActive: number) => {
@@ -73,7 +83,8 @@ const ClayDrilldown: React.FunctionComponent<IProps> & {
 			<div className="drilldown-inner" style={{overflow: 'visible'}}>
 				{children
 					? children
-					: gatherMenus(items).map((menu, i) => (
+					: items &&
+					  gatherMenus(items).map((menu, i) => (
 							<div
 								className={classNames('drilldown-item', {
 									'drilldown-current':
@@ -128,7 +139,7 @@ const ClayDrilldown: React.FunctionComponent<IProps> & {
 											{menu.items.map(
 												(
 													{
-														childIndex,
+														childIndex = 0,
 														className,
 														items: childItems,
 														symbol,
