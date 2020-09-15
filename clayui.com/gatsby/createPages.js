@@ -22,12 +22,12 @@ const TAB_MAP_NAME = {
 	markup: 'Markup',
 };
 
-const slugWithBar = (path) => {
+const slugWithBar = path => {
 	return path.startsWith('/') ? path : `/${path}`;
 };
 
 const getTabs = (permalink, pathGroup) => {
-	const sortTabs = (a) => (a.name === 'API' ? 1 : -1);
+	const sortTabs = a => (a.name === 'API' ? 1 : -1);
 
 	const tabs = pathGroup.filter(
 		({
@@ -136,7 +136,7 @@ const createDocs = (actions, edges, mdx, pathGroup) => {
 };
 
 module.exports = async ({actions, graphql}) => {
-	Object.keys(redirects).forEach((fromPath) => {
+	Object.keys(redirects).forEach(fromPath => {
 		const toPath = redirects[fromPath];
 
 		actions.createRedirect({
@@ -225,7 +225,7 @@ module.exports = async ({actions, graphql}) => {
 			newestBlogEntry.data.allMarkdownRemark.edges[0].node;
 
 		// Blog landing page should always show the most recent blog entry.
-		['/blog/', '/blog'].map((slug) => {
+		['/blog/', '/blog'].map(slug => {
 			actions.createRedirect({
 				fromPath: slug,
 				redirectInBrowser: true,

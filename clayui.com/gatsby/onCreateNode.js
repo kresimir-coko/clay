@@ -62,7 +62,7 @@ module.exports = exports.onCreateNode = ({actions, getNode, node}) => {
 		let pkgStatus = packageStatus;
 
 		if (pkgVersion && packageNpm) {
-			const isBeta = ['beta', 'alpha', 'milestone'].some((subs) =>
+			const isBeta = ['beta', 'alpha', 'milestone'].some(subs =>
 				pkgVersion.includes(subs)
 			);
 
@@ -78,7 +78,7 @@ module.exports = exports.onCreateNode = ({actions, getNode, node}) => {
 						'@clayui/',
 						''
 					)}.html`;
-				} else {
+				} else if (!relativePath.includes('-tab')) {
 					slug = `docs/components/${fileName
 						.replace('_', '-')
 						.toLowerCase()}.html`;
